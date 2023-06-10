@@ -44,4 +44,13 @@ public class CustomerServiceImpl implements CustomerService {
         return customerHashMap.getOrDefault(id,null);
     }
 
+    @Override
+    public Customer saveCustomer(Customer customer) {
+        Customer saveCustomer =  Customer.builder().id(UUID.randomUUID())
+                .customerName(customer.getCustomerName()).version(customer.getVersion())
+                .createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build();
+        customerHashMap.put(saveCustomer.getId(),saveCustomer);
+        return saveCustomer;
+    }
+
 }
