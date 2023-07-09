@@ -62,4 +62,9 @@ public class CustomerServiceImpl implements CustomerService {
         return existCust;
     }
 
+    @Override
+    public void deleteCustomer(UUID id) {
+        customerHashMap.remove(id);
+    }
+
 }
