@@ -3,6 +3,7 @@ package com.example.springmvc6rest.service.Impl;
 import com.example.springmvc6rest.domain.Customer;
 import com.example.springmvc6rest.service.CustomerService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -65,6 +66,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomer(UUID id) {
         customerHashMap.remove(id);
+    }
+
+    public void patchCustomerById(UUID id,Customer customer){
+        Customer existing = customerHashMap.get(id);
+
+        if(StringUtils.hasText(customer.getCustomerName())){
+            existing.setCustomerName(customer.getCustomerName());
+        }
+        if(customer.getVersion() != null){
+            existing.setVersion(customer.getVersion());
+        }
+        existing.setLastModifiedDate(LocalDateTime.now());
     }
 
 }
