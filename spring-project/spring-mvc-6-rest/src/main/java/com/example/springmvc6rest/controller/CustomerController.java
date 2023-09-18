@@ -51,6 +51,7 @@ public class CustomerController {
         Customer updatedCustomer = customerService.updateCustomer(id,customer);
         return new ResponseEntity<>(updatedCustomer,HttpStatus.OK);
     }
+
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("id") UUID id){
         customerService.deleteCustomer(id);
