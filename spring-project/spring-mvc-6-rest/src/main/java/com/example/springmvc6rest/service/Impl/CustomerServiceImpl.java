@@ -1,6 +1,6 @@
 package com.example.springmvc6rest.service.Impl;
 
-import com.example.springmvc6rest.domain.Customer;
+import com.example.springmvc6rest.dto.CustomerDto;
 import com.example.springmvc6rest.service.CustomerService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -10,22 +10,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private Map<UUID, Customer> customerHashMap;
+    private Map<UUID, CustomerDto> customerHashMap;
 
     public CustomerServiceImpl() {
 
-        Customer customer1 = Customer.builder().id(UUID.randomUUID()).customerName("Thor").version(1)
+        CustomerDto customer1 = CustomerDto.builder().id(UUID.randomUUID()).customerName("Thor").version(1)
                 .createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build();
 
-        Customer customer2 = Customer.builder().id(UUID.randomUUID()).customerName("IronMan").version(1)
+        CustomerDto customer2 = CustomerDto.builder().id(UUID.randomUUID()).customerName("IronMan").version(1)
                 .createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build();
 
-        Customer customer3 = Customer.builder().id(UUID.randomUUID()).customerName("SpiderMan").version(1)
+        CustomerDto customer3 = CustomerDto.builder().id(UUID.randomUUID()).customerName("SpiderMan").version(1)
                 .createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build();
 
         customerHashMap = new HashMap<>();
@@ -36,18 +37,18 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getCustomerDetails(){
+    public List<CustomerDto> getCustomerDetails(){
         return new ArrayList<>(customerHashMap.values());
     }
 
     @Override
-    public Customer getCustomerById(UUID id){
-        return customerHashMap.getOrDefault(id,null);
+    public Optional<CustomerDto> getCustomerById(UUID id){
+        return Optional.ofNullable(customerHashMap.getOrDefault(id, null));
     }
 
     @Override
-    public Customer saveCustomer(Customer customer) {
-        Customer saveCustomer =  Customer.builder().id(UUID.randomUUID())
+    public CustomerDto saveCustomer(CustomerDto customer) {
+        CustomerDto saveCustomer =  CustomerDto.builder().id(UUID.randomUUID())
                 .customerName(customer.getCustomerName()).version(customer.getVersion())
                 .createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build();
         customerHashMap.put(saveCustomer.getId(),saveCustomer);
@@ -55,21 +56,22 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomer(UUID id,Customer customer) {
-        Customer existCust = customerHashMap.get(id);
+    public Optional<CustomerDto> updateCustomer(UUID id, CustomerDto customer) {
+        CustomerDto existCust = customerHashMap.get(id);
         existCust.setCustomerName(customer.getCustomerName());
         existCust.setVersion(customer.getVersion());
         customerHashMap.put(id,existCust);
-        return existCust;
+        return Optional.of(existCust);
     }
 
     @Override
-    public void deleteCustomer(UUID id) {
+    public Boolean deleteCustomer(UUID id) {
         customerHashMap.remove(id);
+        return true;
     }
 
-    public void patchCustomerById(UUID id,Customer customer){
-        Customer existing = customerHashMap.get(id);
+    public Optional<CustomerDto> patchCustomerById(UUID id, CustomerDto customer){
+        CustomerDto existing = customerHashMap.get(id);
 
         if(StringUtils.hasText(customer.getCustomerName())){
             existing.setCustomerName(customer.getCustomerName());
@@ -78,6 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
             existing.setVersion(customer.getVersion());
         }
         existing.setLastModifiedDate(LocalDateTime.now());
+        return Optional.of(existing);
     }
 
 }
