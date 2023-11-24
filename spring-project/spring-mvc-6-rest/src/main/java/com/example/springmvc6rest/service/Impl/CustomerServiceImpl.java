@@ -2,6 +2,7 @@ package com.example.springmvc6rest.service.Impl;
 
 import com.example.springmvc6rest.dto.CustomerDto;
 import com.example.springmvc6rest.service.CustomerService;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Primary
 public class CustomerServiceImpl implements CustomerService {
 
     private Map<UUID, CustomerDto> customerHashMap;

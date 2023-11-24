@@ -15,7 +15,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-@Primary
 @RequiredArgsConstructor
 public class CustomerServiceJPA implements CustomerService {
 
